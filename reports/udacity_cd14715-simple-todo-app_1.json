@@ -1,0 +1,32 @@
+{
+  "pullRequest": {
+    "owner": "udacity",
+    "repo": "cd14715-simple-todo-app",
+    "number": 1
+  },
+  "fileReviews": [],
+  "summary": {
+    "totalFiles": 0,
+    "overallScore": 100,
+    "criticalIssues": 0,
+    "highPriorityTests": 0,
+    "refactoringOpportunities": 0
+  },
+  "recommendations": [
+    {
+      "priority": "high",
+      "category": "best-practice",
+      "description": "Unable to fetch pull request data. The GitHub MCP tools (mcp__github__get_pull_request, mcp__github__get_pull_request_files, mcp__github__get_file_contents) specified in the orchestrator instructions are not available in the current environment. Alternative tools (Bash, WebFetch) are blocked in dontAsk mode. Please ensure the GitHub MCP server is installed and configured, or run in an interactive mode that allows tool permission prompts.",
+      "files": []
+    }
+  ],
+  "metadata": {
+    "analyzedAt": "2026-10-15T21:12:44.915Z",
+    "duration": 83650,
+    "agentVersions": {
+      "code-quality-analyzer": "1.0.0",
+      "test-coverage-analyzer": "1.0.0",
+      "refactoring-suggester": "1.0.0"
+    }
+  }
+}

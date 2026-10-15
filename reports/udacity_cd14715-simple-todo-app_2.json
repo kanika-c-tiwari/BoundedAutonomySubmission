@@ -1,0 +1,336 @@
+{
+  "pullRequest": {
+    "owner": "udacity",
+    "repo": "cd14715-simple-todo-app",
+    "number": 2
+  },
+  "fileReviews": [
+    {
+      "file": "src/todo.ts",
+      "codeQuality": {
+        "file": "src/todo.ts",
+        "issues": [
+          {
+            "line": 119,
+            "severity": "critical",
+            "category": "security",
+            "description": "SQL injection vulnerability through direct string interpolation. The keyword parameter is concatenated directly into the SQL query without parameterization, allowing an attacker to inject arbitrary SQL commands (e.g., keyword = \"'; DROP TABLE todos; --\").",
+            "suggestion": "Replace string interpolation with parameterized query: const query = 'SELECT * FROM todos WHERE title LIKE $1 OR description LIKE $2'; await db.query(query, [`%${keyword}%`, `%${keyword}%`]);"
+          },
+          {
+            "line": 129,
+            "severity": "critical",
+            "category": "security",
+            "description": "SQL injection vulnerability through string concatenation. The completed parameter is concatenated directly without validation or parameterization, allowing SQL injection attacks. Additionally, no type validation ensures completed is actually a boolean.",
+            "suggestion": "Use parameterized query and validate input type: const query = 'SELECT * FROM todos WHERE completed = $1'; const isCompleted = completed === 'true'; await db.query(query, [isCompleted]);"
+          },
+          {
+            "line": 139,
+            "severity": "critical",
+            "category": "security",
+            "description": "SQL injection vulnerability in template literal. The userId parameter is embedded directly in the query without sanitization or parameterization, allowing attackers to inject SQL (e.g., userId = \"1' OR '1'='1\").",
+            "suggestion": "Use parameterized query: const query = 'SELECT t.* FROM todos t JOIN user_todos ut ON t.id = ut.todo_id WHERE ut.user_id = $1'; await db.query(query, [userId]);"
+          },
+          {
+            "line": 148,
+            "severity": "medium",
+            "category": "security",
+            "description": "Weak ID generation using Date.now() and Math.random() makes IDs predictable and subject to collisions under high load. An attacker could potentially guess valid IDs or create duplicate entries.",
+            "suggestion": "Use a cryptographically secure ID generator like crypto.randomUUID() or a library like uuid: import { randomUUID } from 'crypto'; return randomUUID();"
+          },
+          {
+            "line": 80,
+            "severity": "medium",
+            "category": "performance",
+            "description": "getAllTodos() has no pagination or limit, which will cause performance degradation and memory issues as the todo list grows. Loading thousands of records at once will slow down the application significantly.",
+            "suggestion": "Add pagination parameters: export async function getAllTodos(limit: number = 100, offset: number = 0): Promise<Todo[]> { const query = 'SELECT * FROM todos ORDER BY created_at DESC LIMIT $1 OFFSET $2'; return await db.query(query, [limit, offset]); }"
+          },
+          {
+            "line": 57,
+            "severity": "low",
+            "category": "bug-risk",
+            "description": "createTodo sanitizes input for XSS prevention, but this is unnecessary for database storage and could cause data corruption. HTML entities should be encoded at the presentation layer, not the data layer. Storing '&lt;' instead of '<' means data is permanently altered.",
+            "suggestion": "Remove sanitization from createTodo and apply HTML escaping only when rendering in the UI. Store raw validated data in the database: const todo = { ..., title: input.title.trim(), description: input.description || '' };"
+          },
+          {
+            "line": 105,
+            "severity": "low",
+            "category": "bug-risk",
+            "description": "updateTodoStatus does not verify that the todo exists before updating. If an invalid ID is provided, the operation silently succeeds without updating any rows, giving no feedback to the caller.",
+            "suggestion": "Check affected rows and throw if the todo doesn't exist: const result = await db.query(query, [completed, id]); if (result.affectedRows === 0) { throw new Error('Todo not found'); }"
+          },
+          {
+            "line": 113,
+            "severity": "low",
+            "category": "bug-risk",
+            "description": "deleteTodo does not verify that the todo exists before attempting deletion. Silent failures make debugging difficult and may hide logic errors in calling code.",
+            "suggestion": "Check affected rows and throw if the todo doesn't exist: const result = await db.query(query, [id]); if (result.affectedRows === 0) { throw new Error('Todo not found'); }"
+          },
+          {
+            "line": 23,
+            "severity": "low",
+            "category": "maintainability",
+            "description": "validateTodoInput returns only a boolean without explaining what validation failed. Callers cannot provide meaningful error messages to users about whether the title is missing, too long, or if the description exceeds limits.",
+            "suggestion": "Return a validation result object or throw specific errors: if (!input.title?.trim()) { throw new Error('Title is required'); } if (input.title.length > 200) { throw new Error('Title must be 200 characters or less'); }"
+          },
+          {
+            "line": 129,
+            "severity": "high",
+            "category": "bug-risk",
+            "description": "searchTodosByStatus accepts a string parameter but should accept a boolean. This function will never work correctly because the completed column is likely a boolean type, but the parameter is treated as a raw string concatenated into SQL.",
+            "suggestion": "Change parameter type and use parameterized query: export async function searchTodosByStatus(completed: boolean): Promise<Todo[]> { const query = 'SELECT * FROM todos WHERE completed = $1'; return await db.query(query, [completed]); }"
+          }
+        ],
+        "overallScore": 25,
+        "summary": "This file contains three critical SQL injection vulnerabilities (lines 119, 129, 139) that allow arbitrary SQL execution through unsanitized user input. These are exploitable security flaws that must be fixed immediately. Additional issues include missing pagination in getAllTodos (performance risk), predictable ID generation (security concern), incorrect data-layer sanitization (bug risk), and poor validation feedback (maintainability). The parameterized queries in createTodo, getTodoById, updateTodoStatus, and deleteTodo demonstrate the correct approach that should be applied to all database operations."
+      },
+      "testCoverage": {
+        "file": "src/todo.ts",
+        "hasTests": false,
+        "testFiles": [],
+        "untestedPaths": [
+          {
+            "type": "function",
+            "location": "validateTodoInput() with empty title",
+            "priority": "high",
+            "reasoning": "Empty or whitespace-only titles return false but no test verifies this validation prevents invalid todos from being created.",
+            "suggestedTest": "Call validateTodoInput with { title: '', description: 'test' } and assert it returns false."
+          },
+          {
+            "type": "function",
+            "location": "validateTodoInput() with title exceeding 200 characters",
+            "priority": "high",
+            "reasoning": "The 200-character limit is a business constraint that should be enforced, but no test locks it in.",
+            "suggestedTest": "Call validateTodoInput with a title of 201 characters and assert it returns false."
+          },
+          {
+            "type": "function",
+            "location": "validateTodoInput() with description exceeding 1000 characters",
+            "priority": "medium",
+            "reasoning": "The 1000-character limit for descriptions is unchecked by tests.",
+            "suggestedTest": "Call validateTodoInput with { title: 'valid', description: 'a'.repeat(1001) } and assert it returns false."
+          },
+          {
+            "type": "function",
+            "location": "sanitizeInput() with XSS attack vectors",
+            "priority": "critical",
+            "reasoning": "This function prevents XSS attacks by escaping HTML characters. Without tests, changes could introduce vulnerabilities.",
+            "suggestedTest": "Call sanitizeInput with '<script>alert(1)</script>' and assert it returns '&lt;script&gt;alert(1)&lt;/script&gt;'."
+          },
+          {
+            "type": "function",
+            "location": "createTodo() with invalid input",
+            "priority": "high",
+            "reasoning": "The function throws 'Invalid todo input' when validation fails, but no test confirms this error path.",
+            "suggestedTest": "Call createTodo with an empty title and expect it to throw an Error with message 'Invalid todo input'."
+          },
+          {
+            "type": "function",
+            "location": "createTodo() happy path with sanitization",
+            "priority": "high",
+            "reasoning": "No test verifies that user input is properly sanitized before storage, which is a security-critical operation.",
+            "suggestedTest": "Call createTodo with title containing '<b>bold</b>' and verify the stored todo has '&lt;b&gt;bold&lt;/b&gt;'."
+          },
+          {
+            "type": "function",
+            "location": "getAllTodos()",
+            "priority": "medium",
+            "reasoning": "No test verifies that todos are returned in descending order by created_at.",
+            "suggestedTest": "Mock db.query to return todos with different timestamps and assert getAllTodos returns them ordered by created_at DESC."
+          },
+          {
+            "type": "function",
+            "location": "getTodoById() when todo exists",
+            "priority": "medium",
+            "reasoning": "The function uses parameterized queries (safe from SQL injection) but has no test for the happy path.",
+            "suggestedTest": "Mock db.query to return a single todo and assert getTodoById returns that todo object."
+          },
+          {
+            "type": "branch",
+            "location": "getTodoById() when todo does not exist",
+            "priority": "medium",
+            "reasoning": "The function returns null for non-existent IDs, but no test verifies this behavior.",
+            "suggestedTest": "Mock db.query to return an empty array and assert getTodoById returns null."
+          },
+          {
+            "type": "function",
+            "location": "updateTodoStatus()",
+            "priority": "medium",
+            "reasoning": "No test confirms that the completed status is updated correctly using parameterized queries.",
+            "suggestedTest": "Mock db.query and call updateTodoStatus('id123', true), then verify the query was called with correct parameters."
+          },
+          {
+            "type": "function",
+            "location": "deleteTodo()",
+            "priority": "medium",
+            "reasoning": "No test verifies the delete operation uses parameterized queries correctly.",
+            "suggestedTest": "Mock db.query and call deleteTodo('id123'), then verify the DELETE query was executed with the correct ID parameter."
+          },
+          {
+            "type": "function",
+            "location": "searchTodos() SQL injection vulnerability",
+            "priority": "critical",
+            "reasoning": "This function is explicitly marked as vulnerable to SQL injection via string concatenation. No test demonstrates this vulnerability or guards against regression if fixed.",
+            "suggestedTest": "Call searchTodos with \"'; DROP TABLE todos; --\" and verify it executes a vulnerable query (for documentation), then add a test that expects parameterized queries after fixing."
+          },
+          {
+            "type": "function",
+            "location": "searchTodosByStatus() SQL injection vulnerability",
+            "priority": "critical",
+            "reasoning": "Marked as vulnerable - user input is directly concatenated into SQL without validation. This is a critical security flaw.",
+            "suggestedTest": "Call searchTodosByStatus with \"1; DROP TABLE todos; --\" to demonstrate the vulnerability, then test the fix uses parameterized queries."
+          },
+          {
+            "type": "function",
+            "location": "getTodosByUser() SQL injection vulnerability",
+            "priority": "critical",
+            "reasoning": "Template literal concatenation with userId creates SQL injection risk. No sanitization or parameterization exists.",
+            "suggestedTest": "Call getTodosByUser with \"' OR '1'='1\" to show the vulnerability returns unauthorized todos, then test the secure implementation."
+          },
+          {
+            "type": "edge-case",
+            "location": "createTodo() with only whitespace in title",
+            "priority": "high",
+            "reasoning": "The validation trims the title, so '   ' would fail validation, but no test confirms this behavior.",
+            "suggestedTest": "Call createTodo with { title: '   ', description: 'test' } and expect it to throw 'Invalid todo input'."
+          },
+          {
+            "type": "edge-case",
+            "location": "createTodo() with undefined or missing description",
+            "priority": "medium",
+            "reasoning": "The code handles optional descriptions with 'input.description || \"\"', but no test verifies empty string is stored.",
+            "suggestedTest": "Call createTodo with { title: 'valid' } (no description property) and verify the stored todo has an empty string description."
+          }
+        ],
+        "coverageEstimate": 0,
+        "summary": "No tests exist for src/todo.ts. The file contains 3 critical SQL injection vulnerabilities (searchTodos, searchTodosByStatus, getTodosByUser) that are explicitly marked as vulnerable. The security functions (validateTodoInput, sanitizeInput) that prevent XSS and enforce business rules are completely untested. All CRUD operations lack test coverage. This is a high-risk state for a production application handling user data."
+      },
+      "refactorings": {
+        "file": "src/todo.ts",
+        "suggestions": [
+          {
+            "type": "extract-function",
+            "location": "createTodo lines 52-73",
+            "impact": "medium",
+            "description": "Input validation and sanitization logic is interleaved with todo object construction and database insertion in createTodo.",
+            "before": "export async function createTodo(input: CreateTodoInput): Promise<Todo> {\n  if (!validateTodoInput(input)) { throw ... }\n  const sanitizedTitle = sanitizeInput(input.title.trim());\n  const sanitizedDescription = sanitizeInput(input.description || '');\n  const todo: Todo = { id: generateId(), title: sanitizedTitle, ... };\n  await db.query(query, params);\n  return todo;\n}",
+            "after": "function prepareTodoData(input: CreateTodoInput): Todo {\n  const sanitizedTitle = sanitizeInput(input.title.trim());\n  const sanitizedDescription = sanitizeInput(input.description || '');\n  return { id: generateId(), title: sanitizedTitle, description: sanitizedDescription, completed: false, createdAt: new Date() };\n}\n\nexport async function createTodo(input: CreateTodoInput): Promise<Todo> {\n  if (!validateTodoInput(input)) { throw new Error('Invalid todo input'); }\n  const todo = prepareTodoData(input);\n  await insertTodo(todo);\n  return todo;\n}",
+            "benefits": "Separates data preparation from persistence, making each step testable in isolation and clarifying the function's structure."
+          },
+          {
+            "type": "simplify",
+            "location": "validateTodoInput lines 24-36",
+            "impact": "low",
+            "description": "Multiple early-return guards can be combined with guard clauses for better readability.",
+            "before": "export function validateTodoInput(input: CreateTodoInput): boolean {\n  if (!input.title || input.title.trim().length === 0) {\n    return false;\n  }\n  if (input.title.length > 200) {\n    return false;\n  }\n  if (input.description && input.description.length > 1000) {\n    return false;\n  }\n  return true;\n}",
+            "after": "export function validateTodoInput(input: CreateTodoInput): boolean {\n  const trimmedTitle = input.title?.trim();\n  if (!trimmedTitle || trimmedTitle.length === 0) return false;\n  if (input.title.length > 200) return false;\n  if (input.description?.length > 1000) return false;\n  return true;\n}",
+            "benefits": "Removes unnecessary nesting and makes the guard pattern more explicit. Also avoids redundant trim calls by caching the result."
+          },
+          {
+            "type": "extract-function",
+            "location": "sanitizeInput lines 41-48",
+            "impact": "medium",
+            "description": "HTML entity encoding is a cross-cutting concern mixed with todo domain logic.",
+            "before": "export function sanitizeInput(input: string): string {\n  return input\n    .replace(/</g, '&lt;')\n    .replace(/>/g, '&gt;')\n    .replace(/\"/g, '&quot;')\n    .replace(/'/g, '&#039;');\n}",
+            "after": "// Move to src/utils/html.ts\nexport function escapeHtml(input: string): string {\n  return input\n    .replace(/</g, '&lt;')\n    .replace(/>/g, '&gt;')\n    .replace(/\"/g, '&quot;')\n    .replace(/'/g, '&#039;');\n}\n\n// In todo.ts\nimport { escapeHtml } from './utils/html';\nconst sanitizedTitle = escapeHtml(input.title.trim());",
+            "benefits": "Moves HTML escaping to a dedicated utility module, clarifying that this is presentation-layer logic, not domain logic. Makes it reusable across the application."
+          },
+          {
+            "type": "pattern-improvement",
+            "location": "Database query pattern throughout file",
+            "impact": "high",
+            "description": "Database operations are duplicated across multiple functions with similar structure (query + params). A repository pattern or query builder would centralize this.",
+            "before": "export async function getTodoById(id: string): Promise<Todo | null> {\n  const query = 'SELECT * FROM todos WHERE id = $1';\n  const rows = await db.query(query, [id]);\n  if (rows.length === 0) return null;\n  return rows[0] as Todo;\n}\n\nexport async function updateTodoStatus(id: string, completed: boolean): Promise<void> {\n  const query = 'UPDATE todos SET completed = $1 WHERE id = $2';\n  await db.query(query, [completed, id]);\n}",
+            "after": "class TodoRepository {\n  async findById(id: string): Promise<Todo | null> {\n    const rows = await db.query('SELECT * FROM todos WHERE id = $1', [id]);\n    return rows[0] ?? null;\n  }\n\n  async updateStatus(id: string, completed: boolean): Promise<void> {\n    await db.query('UPDATE todos SET completed = $1 WHERE id = $2', [completed, id]);\n  }\n\n  async insert(todo: Todo): Promise<void> {\n    await db.query(\n      'INSERT INTO todos (id, title, description, completed, created_at) VALUES ($1, $2, $3, $4, $5)',\n      [todo.id, todo.title, todo.description, todo.completed, todo.createdAt]\n    );\n  }\n}",
+            "benefits": "Groups all database access in one place, making it easier to maintain queries, add caching, or swap data sources. Reduces duplication of query execution patterns."
+          },
+          {
+            "type": "modernize",
+            "location": "getTodoById lines 85-93",
+            "impact": "low",
+            "description": "Manual null check and array indexing can use modern nullish coalescing.",
+            "before": "export async function getTodoById(id: string): Promise<Todo | null> {\n  const query = 'SELECT * FROM todos WHERE id = $1';\n  const rows = await db.query(query, [id]);\n  if (rows.length === 0) {\n    return null;\n  }\n  return rows[0] as Todo;\n}",
+            "after": "export async function getTodoById(id: string): Promise<Todo | null> {\n  const query = 'SELECT * FROM todos WHERE id = $1';\n  const rows = await db.query(query, [id]);\n  return (rows[0] as Todo) ?? null;\n}",
+            "benefits": "More concise and idiomatic modern TypeScript. The nullish coalescing operator handles both undefined and explicit length check."
+          },
+          {
+            "type": "simplify",
+            "location": "generateId lines 152-154",
+            "impact": "low",
+            "description": "ID generation mixes timestamp and randomness inline. The intent could be clearer.",
+            "before": "function generateId(): string {\n  return `todo_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;\n}",
+            "after": "function generateId(): string {\n  const timestamp = Date.now();\n  const randomPart = Math.random().toString(36).slice(2, 9);\n  return `todo_${timestamp}_${randomPart}`;\n}",
+            "benefits": "Breaking out the components makes it easier to understand what each part contributes and modify the format later."
+          }
+        ],
+        "summary": "The file has good separation of concerns at the function level but would benefit from extracting data preparation logic from createTodo, consolidating database operations into a repository pattern, and modernizing some conditionals. The HTML escaping logic should move to a shared utility module since it's not domain-specific. Most refactorings are medium impact, with the repository pattern being high impact due to reducing duplication across multiple database operations."
+      }
+    }
+  ],
+  "summary": {
+    "totalFiles": 1,
+    "overallScore": 25,
+    "criticalIssues": 3,
+    "highPriorityTests": 9,
+    "refactoringOpportunities": 6
+  },
+  "recommendations": [
+    {
+      "priority": "critical",
+      "category": "security",
+      "description": "Fix SQL injection vulnerabilities in searchTodos, searchTodosByStatus, and getTodosByUser by replacing string concatenation with parameterized queries. These functions allow attackers to execute arbitrary SQL commands and compromise the entire database.",
+      "files": [
+        "src/todo.ts"
+      ]
+    },
+    {
+      "priority": "critical",
+      "category": "testing",
+      "description": "Add security tests for the three vulnerable SQL injection functions to demonstrate the vulnerability and verify the fix. Include tests with malicious inputs like \"'; DROP TABLE todos; --\" and \"' OR '1'='1\".",
+      "files": [
+        "src/todo.ts"
+      ]
+    },
+    {
+      "priority": "high",
+      "category": "testing",
+      "description": "Implement comprehensive unit tests for all functions, especially security-critical validation and sanitization logic. Currently at 0% test coverage for a file handling user data.",
+      "files": [
+        "src/todo.ts"
+      ]
+    },
+    {
+      "priority": "high",
+      "category": "maintainability",
+      "description": "Refactor database operations into a repository pattern to reduce code duplication and centralize query management. This will make it easier to maintain and audit SQL queries for security issues.",
+      "files": [
+        "src/todo.ts"
+      ]
+    },
+    {
+      "priority": "medium",
+      "category": "security",
+      "description": "Replace weak ID generation (Date.now() + Math.random()) with cryptographically secure UUIDs using crypto.randomUUID() to prevent ID prediction and collision attacks.",
+      "files": [
+        "src/todo.ts"
+      ]
+    },
+    {
+      "priority": "medium",
+      "category": "performance",
+      "description": "Add pagination to getAllTodos() function to prevent performance degradation and memory issues as the dataset grows. Implement limit and offset parameters with reasonable defaults.",
+      "files": [
+        "src/todo.ts"
+      ]
+    }
+  ],
+  "metadata": {
+    "analyzedAt": "2026-10-15T21:20:40.965Z",
+    "duration": 462207,
+    "agentVersions": {
+      "code-quality-analyzer": "1.0.0",
+      "test-coverage-analyzer": "1.0.0",
+      "refactoring-suggester": "1.0.0"
+    }
+  }
+}

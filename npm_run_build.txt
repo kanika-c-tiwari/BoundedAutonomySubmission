@@ -1,0 +1,6 @@
+PS C:\Users\kanika.c.tiwari\Downloads\cd14715-claude-code-classroom-main\project\starter> npm run build
+
+> claude-multiagent-code-review-starter@1.0.0 build
+> tsc
+
+PS C:\Users\kanika.c.tiwari\Downloads\cd14715-claude-code-classroom-main\project\starter> 

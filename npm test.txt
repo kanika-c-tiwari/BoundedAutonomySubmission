@@ -1,0 +1,402 @@
+PS C:\Users\kanika.c.tiwari\Downloads\cd14715-claude-code-classroom-main\project\starter> npm test
+
+> claude-multiagent-code-review-starter@1.0.0 test
+> vitest run
+
+
+ RUN  v4.0.17 C:/Users/kanika.c.tiwari/Downloads/cd14715-claude-code-classroom-main/project/starter
+
+ ✓ tests/utils.test.ts (10 tests) 19ms
+ ✓ tests/schemas.test.ts (12 tests) 8ms
+stdout | tests/orchestrator.test.ts > CodeReviewOrchestrator > reviewPullRequest > should fetch PR files from GitHub MCP
+2026-10-16 00:45:12 [info]: Starting code review
+{
+  "service": "code-review-system",
+  "owner": "octocat",
+  "repo": "Hello-World",
+  "prNumber": 1
+}
+
+stdout | tests/orchestrator.test.ts > CodeReviewOrchestrator > reviewPullRequest > should fetch PR files from GitHub MCP
+2026-10-16 00:45:12 [info]: MCP servers initialized
+{
+  "service": "code-review-system",
+  "mcpServers": [
+    {
+      "name": "github",
+      "status": "connected"
+    },
+    {
+      "name": "eslint",
+      "status": "connected"
+    }
+  ]
+}
+
+stdout | tests/orchestrator.test.ts > CodeReviewOrchestrator > reviewPullRequest > should fetch PR files from GitHub MCP
+2026-10-16 00:45:12 [info]: Tool invoked
+{
+  "service": "code-review-system",
+  "tool": "mcp__github__get_pull_request_files"
+}
+2026-10-16 00:45:12 [info]: Tool invoked
+{
+  "service": "code-review-system",
+  "tool": "Task"
+}
+2026-10-16 00:45:12 [info]: Tool invoked
+{
+  "service": "code-review-system",
+  "tool": "Task"
+}
+2026-10-16 00:45:12 [info]: Tool invoked
+{
+  "service": "code-review-system",
+  "tool": "Task"
+}
+
+stdout | tests/orchestrator.test.ts > CodeReviewOrchestrator > reviewPullRequest > should fetch PR files from GitHub MCP
+2026-10-16 00:45:12 [info]: Code review completed
+{
+  "service": "code-review-system",
+  "owner": "octocat",
+  "repo": "Hello-World",
+  "prNumber": 1,
+  "score": 90,
+  "duration": 7,
+  "status": "success"
+}
+
+stdout | tests/orchestrator.test.ts > CodeReviewOrchestrator > reviewPullRequest > should spawn all 3 subagents in parallel
+2026-10-16 00:45:12 [info]: Starting code review
+{
+  "service": "code-review-system",
+  "owner": "octocat",
+  "repo": "Hello-World",
+  "prNumber": 1
+}
+
+stdout | tests/orchestrator.test.ts > CodeReviewOrchestrator > reviewPullRequest > should spawn all 3 subagents in parallel
+2026-10-16 00:45:12 [info]: MCP servers initialized
+{
+  "service": "code-review-system",
+  "mcpServers": [
+    {
+      "name": "github",
+      "status": "connected"
+    },
+    {
+      "name": "eslint",
+      "status": "connected"
+    }
+  ]
+}
+
+stdout | tests/orchestrator.test.ts > CodeReviewOrchestrator > reviewPullRequest > should spawn all 3 subagents in parallel
+2026-10-16 00:45:12 [info]: Tool invoked
+{
+  "service": "code-review-system",
+  "tool": "mcp__github__get_pull_request_files"
+}
+2026-10-16 00:45:12 [info]: Tool invoked
+{
+  "service": "code-review-system",
+  "tool": "Task"
+}
+2026-10-16 00:45:12 [info]: Tool invoked
+{
+  "service": "code-review-system",
+  "tool": "Task"
+}
+2026-10-16 00:45:12 [info]: Tool invoked
+{
+  "service": "code-review-system",
+  "tool": "Task"
+}
+
+stdout | tests/orchestrator.test.ts > CodeReviewOrchestrator > reviewPullRequest > should spawn all 3 subagents in parallel
+2026-10-16 00:45:12 [info]: Code review completed
+{
+  "service": "code-review-system",
+  "owner": "octocat",
+  "repo": "Hello-World",
+  "prNumber": 1,
+  "score": 90,
+  "duration": 1,
+  "status": "success"
+}
+
+stdout | tests/orchestrator.test.ts > CodeReviewOrchestrator > reviewPullRequest > should aggregate results into ReviewReport
+2026-10-16 00:45:12 [info]: Starting code review
+{
+  "service": "code-review-system",
+  "owner": "octocat",
+  "repo": "Hello-World",
+  "prNumber": 1
+}
+
+stdout | tests/orchestrator.test.ts > CodeReviewOrchestrator > reviewPullRequest > should aggregate results into ReviewReport
+2026-10-16 00:45:12 [info]: MCP servers initialized
+{
+  "service": "code-review-system",
+  "mcpServers": [
+    {
+      "name": "github",
+      "status": "connected"
+    },
+    {
+      "name": "eslint",
+      "status": "connected"
+    }
+  ]
+}
+
+stdout | tests/orchestrator.test.ts > CodeReviewOrchestrator > reviewPullRequest > should aggregate results into ReviewReport
+2026-10-16 00:45:12 [info]: Tool invoked
+{
+  "service": "code-review-system",
+  "tool": "mcp__github__get_pull_request_files"
+}
+2026-10-16 00:45:12 [info]: Tool invoked
+{
+  "service": "code-review-system",
+  "tool": "Task"
+}
+2026-10-16 00:45:12 [info]: Tool invoked
+{
+  "service": "code-review-system",
+  "tool": "Task"
+}
+2026-10-16 00:45:12 [info]: Tool invoked
+{
+  "service": "code-review-system",
+  "tool": "Task"
+}
+
+stdout | tests/orchestrator.test.ts > CodeReviewOrchestrator > reviewPullRequest > should aggregate results into ReviewReport
+2026-10-16 00:45:12 [info]: Code review completed
+{
+  "service": "code-review-system",
+  "owner": "octocat",
+  "repo": "Hello-World",
+  "prNumber": 1,
+  "score": 90,
+  "duration": 1,
+  "status": "success"
+}
+
+stdout | tests/orchestrator.test.ts > CodeReviewOrchestrator > reviewPullRequest > should validate output with Zod schema
+2026-10-16 00:45:12 [info]: Starting code review
+{
+  "service": "code-review-system",
+  "owner": "octocat",
+  "repo": "Hello-World",
+  "prNumber": 1
+}
+
+stdout | tests/orchestrator.test.ts > CodeReviewOrchestrator > reviewPullRequest > should validate output with Zod schema
+2026-10-16 00:45:12 [info]: MCP servers initialized
+{
+  "service": "code-review-system",
+  "mcpServers": [
+    {
+      "name": "github",
+      "status": "connected"
+    },
+    {
+      "name": "eslint",
+      "status": "connected"
+    }
+  ]
+}
+
+stdout | tests/orchestrator.test.ts > CodeReviewOrchestrator > reviewPullRequest > should validate output with Zod schema
+2026-10-16 00:45:12 [info]: Tool invoked
+{
+  "service": "code-review-system",
+  "tool": "mcp__github__get_pull_request_files"
+}
+2026-10-16 00:45:12 [info]: Tool invoked
+{
+  "service": "code-review-system",
+  "tool": "Task"
+}
+2026-10-16 00:45:12 [info]: Tool invoked
+{
+  "service": "code-review-system",
+  "tool": "Task"
+}
+2026-10-16 00:45:12 [info]: Tool invoked
+{
+  "service": "code-review-system",
+  "tool": "Task"
+}
+
+stdout | tests/orchestrator.test.ts > CodeReviewOrchestrator > reviewPullRequest > should validate output with Zod schema
+2026-10-16 00:45:12 [info]: Code review completed
+{
+  "service": "code-review-system",
+  "owner": "octocat",
+  "repo": "Hello-World",
+  "prNumber": 1,
+  "score": 90,
+  "duration": 1,
+  "status": "success"
+}
+
+stdout | tests/orchestrator.test.ts > CodeReviewOrchestrator > reviewPullRequest > should validate output with Zod schema
+2026-10-16 00:45:12 [info]: Starting code review
+{
+  "service": "code-review-system",
+  "owner": "octocat",
+  "repo": "Hello-World",
+  "prNumber": 1
+}
+
+stdout | tests/orchestrator.test.ts > CodeReviewOrchestrator > reviewPullRequest > should validate output with Zod schema
+2026-10-16 00:45:12 [info]: MCP servers initialized
+{
+  "service": "code-review-system",
+  "mcpServers": [
+    {
+      "name": "github",
+      "status": "connected"
+    },
+    {
+      "name": "eslint",
+      "status": "connected"
+    }
+  ]
+}
+
+stdout | tests/orchestrator.test.ts > CodeReviewOrchestrator > reviewPullRequest > should validate output with Zod schema
+2026-10-16 00:45:12 [info]: Tool invoked
+{
+  "service": "code-review-system",
+  "tool": "mcp__github__get_pull_request_files"
+}
+2026-10-16 00:45:12 [info]: Tool invoked
+{
+  "service": "code-review-system",
+  "tool": "Task"
+}
+2026-10-16 00:45:12 [info]: Tool invoked
+{
+  "service": "code-review-system",
+  "tool": "Task"
+}
+2026-10-16 00:45:12 [info]: Tool invoked
+{
+  "service": "code-review-system",
+  "tool": "Task"
+}
+
+stdout | tests/orchestrator.test.ts > CodeReviewOrchestrator > reviewPullRequest > should validate output with Zod schema
+2026-10-16 00:45:12 [error]: Code review failed
+{
+  "service": "code-review-system",
+  "owner": "octocat",
+  "repo": "Hello-World",
+  "prNumber": 1,
+  "error": "Retry exhausted after 1 attempts: [STRUCTURED_OUTPUT_FAILED] Review report failed schema validation: [\n  {\n    \"code\": \"invalid_type\",\n    \"expected\": \"string
+\",\n    \"received\": \"undefined\",\n    \"path\": [\n      \"pullRequest\",\n      \"repo\"\n    ],\n    \"message\": \"Required\"\n  },\n  {\n    \"code\": \"invalid_type\",\n 
+   \"expected\": \"number\",\n    \"received\": \"undefined\",\n    \"path\": [\n      \"pullRequest\",\n      \"number\"\n    ],\n    \"message\": \"Required\"\n  },\n  {\n    \"c
+ode\": \"invalid_type\",\n    \"expected\": \"array\",\n    \"received\": \"undefined\",\n    \"path\": [\n      \"fileReviews\"\n    ],\n    \"message\": \"Required\"\n  },\n  {\n
+    \"code\": \"invalid_type\",\n    \"expected\": \"object\",\n    \"received\": \"undefined\",\n    \"path\": [\n      \"summary\"\n    ],\n    \"message\": \"Required\"\n  },\n 
+ {\n    \"code\": \"invalid_type\",\n    \"expected\": \"array\",\n    \"received\": \"undefined\",\n    \"path\": [\n      \"recommendations\"\n    ],\n    \"message\": \"Required
+\"\n  },\n  {\n    \"code\": \"invalid_type\",\n    \"expected\": \"object\",\n    \"received\": \"undefined\",\n    \"path\": [\n      \"metadata\"\n    ],\n    \"message\": \"Required\"\n  }\n]",
+  "stack": "ReviewError: Retry exhausted after 1 attempts: [STRUCTURED_OUTPUT_FAILED] Review report failed schema validation: [\n  {\n    \"code\": \"invalid_type\",\n    \"expecte
+d\": \"string\",\n    \"received\": \"undefined\",\n    \"path\": [\n      \"pullRequest\",\n      \"repo\"\n    ],\n    \"message\": \"Required\"\n  },\n  {\n    \"code\": \"inval
+id_type\",\n    \"expected\": \"number\",\n    \"received\": \"undefined\",\n    \"path\": [\n      \"pullRequest\",\n      \"number\"\n    ],\n    \"message\": \"Required\"\n  },\
+n  {\n    \"code\": \"invalid_type\",\n    \"expected\": \"array\",\n    \"received\": \"undefined\",\n    \"path\": [\n      \"fileReviews\"\n    ],\n    \"message\": \"Required\"
+\n  },\n  {\n    \"code\": \"invalid_type\",\n    \"expected\": \"object\",\n    \"received\": \"undefined\",\n    \"path\": [\n      \"summary\"\n    ],\n    \"message\": \"Requir
+ed\"\n  },\n  {\n    \"code\": \"invalid_type\",\n    \"expected\": \"array\",\n    \"received\": \"undefined\",\n    \"path\": [\n      \"recommendations\"\n    ],\n    \"message\
+": \"Required\"\n  },\n  {\n    \"code\": \"invalid_type\",\n    \"expected\": \"object\",\n    \"received\": \"undefined\",\n    \"path\": [\n      \"metadata\"\n    ],\n    \"mes
+sage\": \"Required\"\n  }\n]\n    at withRetry (C:/Users/kanika.c.tiwari/Downloads/cd14715-claude-code-classroom-main/project/starter/src/utils/error-handler.ts:88:9)\n    at proce
+ssTicksAndRejections (node:internal/process/task_queues:105:5)\n    at CodeReviewOrchestrator.reviewPullRequest (C:/Users/kanika.c.tiwari/Downloads/cd14715-claude-code-classroom-ma
+in/project/starter/src/orchestrator.ts:87:22)\n    at C:/Users/kanika.c.tiwari/Downloads/cd14715-claude-code-classroom-main/project/starter/tests/orchestrator.test.ts:175:7\n    at file:///C:/Users/kanika.c.tiwari/Downloads/cd14715-claude-code-classroom-main/node_modules/@vitest/runner/dist/index.js:915:20",
+  "status": "failed"
+}
+
+stdout | tests/orchestrator.test.ts > CodeReviewOrchestrator > reviewPullRequest > should validate output with Zod schema
+2026-10-16 00:45:12 [info]: Starting code review
+{
+  "service": "code-review-system",
+  "owner": "octocat",
+  "repo": "Hello-World",
+  "prNumber": 1
+}
+
+stdout | tests/orchestrator.test.ts > CodeReviewOrchestrator > reviewPullRequest > should validate output with Zod schema
+2026-10-16 00:45:12 [info]: MCP servers initialized
+{
+  "service": "code-review-system",
+  "mcpServers": [
+    {
+      "name": "github",
+      "status": "connected"
+    },
+    {
+      "name": "eslint",
+      "status": "connected"
+    }
+  ]
+}
+
+stdout | tests/orchestrator.test.ts > CodeReviewOrchestrator > reviewPullRequest > should validate output with Zod schema
+2026-10-16 00:45:12 [info]: Tool invoked
+{
+  "service": "code-review-system",
+  "tool": "mcp__github__get_pull_request_files"
+}
+2026-10-16 00:45:12 [info]: Tool invoked
+{
+  "service": "code-review-system",
+  "tool": "Task"
+}
+2026-10-16 00:45:12 [info]: Tool invoked
+{
+  "service": "code-review-system",
+  "tool": "Task"
+}
+2026-10-16 00:45:12 [info]: Tool invoked
+{
+  "service": "code-review-system",
+  "tool": "Task"
+}
+
+stdout | tests/orchestrator.test.ts > CodeReviewOrchestrator > reviewPullRequest > should validate output with Zod schema
+2026-10-16 00:45:12 [error]: Code review failed
+{
+  "service": "code-review-system",
+  "owner": "octocat",
+  "repo": "Hello-World",
+  "prNumber": 1,
+  "error": "Retry exhausted after 1 attempts: [STRUCTURED_OUTPUT_FAILED] Review report failed schema validation: [\n  {\n    \"code\": \"invalid_type\",\n    \"expected\": \"string
+\",\n    \"received\": \"undefined\",\n    \"path\": [\n      \"pullRequest\",\n      \"repo\"\n    ],\n    \"message\": \"Required\"\n  },\n  {\n    \"code\": \"invalid_type\",\n 
+   \"expected\": \"number\",\n    \"received\": \"undefined\",\n    \"path\": [\n      \"pullRequest\",\n      \"number\"\n    ],\n    \"message\": \"Required\"\n  },\n  {\n    \"c
+ode\": \"invalid_type\",\n    \"expected\": \"array\",\n    \"received\": \"undefined\",\n    \"path\": [\n      \"fileReviews\"\n    ],\n    \"message\": \"Required\"\n  },\n  {\n
+    \"code\": \"invalid_type\",\n    \"expected\": \"object\",\n    \"received\": \"undefined\",\n    \"path\": [\n      \"summary\"\n    ],\n    \"message\": \"Required\"\n  },\n 
+ {\n    \"code\": \"invalid_type\",\n    \"expected\": \"array\",\n    \"received\": \"undefined\",\n    \"path\": [\n      \"recommendations\"\n    ],\n    \"message\": \"Required
+\"\n  },\n  {\n    \"code\": \"invalid_type\",\n    \"expected\": \"object\",\n    \"received\": \"undefined\",\n    \"path\": [\n      \"metadata\"\n    ],\n    \"message\": \"Required\"\n  }\n]",
+  "stack": "ReviewError: Retry exhausted after 1 attempts: [STRUCTURED_OUTPUT_FAILED] Review report failed schema validation: [\n  {\n    \"code\": \"invalid_type\",\n    \"expecte
+d\": \"string\",\n    \"received\": \"undefined\",\n    \"path\": [\n      \"pullRequest\",\n      \"repo\"\n    ],\n    \"message\": \"Required\"\n  },\n  {\n    \"code\": \"inval
+id_type\",\n    \"expected\": \"number\",\n    \"received\": \"undefined\",\n    \"path\": [\n      \"pullRequest\",\n      \"number\"\n    ],\n    \"message\": \"Required\"\n  },\
+n  {\n    \"code\": \"invalid_type\",\n    \"expected\": \"array\",\n    \"received\": \"undefined\",\n    \"path\": [\n      \"fileReviews\"\n    ],\n    \"message\": \"Required\"
+\n  },\n  {\n    \"code\": \"invalid_type\",\n    \"expected\": \"object\",\n    \"received\": \"undefined\",\n    \"path\": [\n      \"summary\"\n    ],\n    \"message\": \"Requir
+ed\"\n  },\n  {\n    \"code\": \"invalid_type\",\n    \"expected\": \"array\",\n    \"received\": \"undefined\",\n    \"path\": [\n      \"recommendations\"\n    ],\n    \"message\
+": \"Required\"\n  },\n  {\n    \"code\": \"invalid_type\",\n    \"expected\": \"object\",\n    \"received\": \"undefined\",\n    \"path\": [\n      \"metadata\"\n    ],\n    \"mes
+sage\": \"Required\"\n  }\n]\n    at withRetry (C:/Users/kanika.c.tiwari/Downloads/cd14715-claude-code-classroom-main/project/starter/src/utils/error-handler.ts:88:9)\n    at proce
+ssTicksAndRejections (node:internal/process/task_queues:105:5)\n    at CodeReviewOrchestrator.reviewPullRequest (C:/Users/kanika.c.tiwari/Downloads/cd14715-claude-code-classroom-ma
+in/project/starter/src/orchestrator.ts:87:22)\n    at C:/Users/kanika.c.tiwari/Downloads/cd14715-claude-code-classroom-main/project/starter/tests/orchestrator.test.ts:176:7\n    at file:///C:/Users/kanika.c.tiwari/Downloads/cd14715-claude-code-classroom-main/node_modules/@vitest/runner/dist/index.js:915:20",
+  "status": "failed"
+}
+
+ ✓ tests/orchestrator.test.ts (7 tests | 1 skipped) 24ms
+
+ Test Files  3 passed (3)
+      Tests  28 passed | 1 skipped (29)
+   Start at  00:45:10
+   Duration  2.17s (transform 859ms, setup 0ms, import 1.58s, tests 52ms, environment 1ms)
+
+PS C:\Users\kanika.c.tiwari\Downloads\cd14715-claude-code-classroom-main\project\starter> 
