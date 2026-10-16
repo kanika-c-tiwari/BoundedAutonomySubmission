@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { query } from '@anthropic-ai/claude-agent-sdk';
+import { reviewAgents } from '../src/agents/index.js';
 import { CodeReviewOrchestrator } from '../src/orchestrator.js';
 import { ReviewReportSchema } from '../src/types/report-types.js';
 import type { ReviewReport } from '../src/types/report-types.js';
@@ -99,6 +100,18 @@ describe('CodeReviewOrchestrator', () => {
       });
     });
 
+    it('gives every subagent the Skill tool', () => {
+      expect(Object.keys(reviewAgents)).toEqual([
+        'code-quality-analyzer',
+        'test-coverage-analyzer',
+        'refactoring-suggester'
+      ]);
+
+      for (const [name, agent] of Object.entries(reviewAgents)) {
+        expect(agent.tools, name).toContain('Skill');
+      }
+    });
+
     it('should accept custom rate limit configuration', async () => {
       const orchestrator = new CodeReviewOrchestrator({
         rateLimits: {
@@ -145,11 +158,15 @@ describe('CodeReviewOrchestrator', () => {
       expect(prompt).toContain('Use the test-coverage-analyzer agent');
       expect(prompt).toContain('Use the refactoring-suggester agent');
       expect(prompt).toContain('in parallel');
-      expect(Object.keys(call?.options?.agents ?? {})).toEqual([
+      const agents = call?.options?.agents ?? {};
+      expect(Object.keys(agents)).toEqual([
         'code-quality-analyzer',
         'test-coverage-analyzer',
         'refactoring-suggester'
       ]);
+      for (const [name, agent] of Object.entries(agents)) {
+        expect(agent.tools, name).toContain('Skill');
+      }
     });
 
     it('should aggregate results into ReviewReport', async () => {
@@ -180,6 +197,8 @@ describe('CodeReviewOrchestrator', () => {
   });
 
   describe('Integration', () => {
+    // This file mocks the Claude SDK, so this cannot call the live API.
+    // Run a real review with: npm run dev -- octocat Hello-World 1
     it.skip('should review a real small PR', async () => {
       const orchestrator = new CodeReviewOrchestrator();
       const report = await orchestrator.reviewPullRequest('octocat', 'Hello-World', 1);
